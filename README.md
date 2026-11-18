@@ -1,4 +1,4 @@
-# dmswift MCP server: Instagram and Facebook Pages for AI agents
+# dmswift MCP server: Instagram for AI agents (Facebook Pages coming soon)
 
 [dmswift](https://dmswift.com) is a hosted (remote) [Model Context Protocol](https://modelcontextprotocol.io) server that lets an AI agent run a business's Instagram professional account through Meta's official API: publish and schedule posts, reels, stories and carousels, run comment-to-DM campaigns, answer comments and direct messages, and read insights.
 
@@ -13,7 +13,7 @@ https://app.dmswift.com/mcp
 - **Tools:** 44, each with MCP annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`)
 - **Nothing to install or host.** There is no package to run and no Meta developer app to create. You sign in, connect your Instagram account, and paste the URL into your agent.
 
-> **Platform status.** Instagram professional accounts (Business and Creator) are fully open. Facebook Pages are coming soon for new accounts, once Meta approves Page messaging for the app. Facebook groups and personal Instagram accounts are not supported by Meta's API.
+> **Platform status.** Instagram professional accounts (Business and Creator) are fully open. Facebook Pages are coming soon for new accounts, once Meta approves Page messaging for the app. dmswift does not support Facebook groups, and Meta's API does not cover personal Instagram accounts.
 
 This repository holds the public documentation, client configuration examples and prompts for the server. The server itself is a hosted service; its source is not in this repository.
 
@@ -56,12 +56,12 @@ This repository holds the public documentation, client configuration examples an
 |---|---|
 | **Claude** (web, desktop, mobile) | Customize, Connectors, Add custom connector. Name it dmswift, paste the URL, Connect, then sign in. [Guide](https://dmswift.com/mcp/claude) |
 | **Claude Code** | `claude mcp add --transport http --scope user dmswift https://app.dmswift.com/mcp`, then `/mcp` and Authenticate |
-| **ChatGPT** | chatgpt.com/plugins, +, Add custom MCP server, the URL, authentication OAuth. In a chat type `@` and pick it. [Guide](https://dmswift.com/mcp/chatgpt) |
+| **ChatGPT** | chatgpt.com/plugins, +, Add custom MCP server, the URL, authentication OAuth, then install it. In a chat type `@` and pick it. Which plans may run write actions over a custom MCP server is set by OpenAI: see [OpenAI's help page](https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt-beta). [Guide](https://dmswift.com/mcp/chatgpt) |
 | **Cursor** | `~/.cursor/mcp.json`, see [examples/cursor-mcp.json](examples/cursor-mcp.json). [Guide](https://dmswift.com/mcp/cursor) |
 | **VS Code** (Copilot agent mode) | `.vscode/mcp.json`, see [examples/vscode-mcp.json](examples/vscode-mcp.json) |
 | **Gemini** | gemini.google.com, Settings, Connected Apps, Custom apps, Add a custom app. [Guide](https://dmswift.com/mcp/gemini) |
 | **Grok** | grok.com/connectors, New Connector, Custom. [Guide](https://dmswift.com/mcp/grok) |
-| **Perplexity** | Plugins, Add custom, Connector, Add MCP connector, Remote. [Guide](https://dmswift.com/mcp/perplexity) |
+| **Perplexity** | Plugins, Add custom, Add MCP connector, Remote. [Guide](https://dmswift.com/mcp/perplexity) |
 | **n8n, Make, Zapier** | The MCP Client node, module or app with the URL and an API key as a Bearer token. [Guide](https://dmswift.com/mcp/n8n) |
 | **Any other MCP client** | Remote server, Streamable HTTP, the URL above. OAuth if the client supports it, otherwise an API key. See [examples/generic-api-key.json](examples/generic-api-key.json) |
 
@@ -102,7 +102,7 @@ Only the tools the connection's scopes allow are registered. Read tools are free
 | Tool | What it does |
 |---|---|
 | `list_comments` | Comments on live posts, newest first |
-| `reply_to_comment`, `comment_on_post`, `like_comment` | Public replies (liking and commenting as the Page are Facebook only) |
+| `reply_to_comment`, `comment_on_post`, `like_comment` | Public replies (liking a comment is Facebook only; `comment_on_post` on Instagram is text only) |
 | `hide_comment`, `delete_comment` | Moderation. Hiding is reversible and preferred |
 
 ### Inbox
@@ -153,7 +153,7 @@ More on [security at dmswift](https://dmswift.com/security).
 - **One private reply per comment**, within 7 days of the comment ([Private Replies](https://developers.facebook.com/docs/instagram-platform/private-replies/)).
 - **The 24-hour window.** After that, more messages only if the person answers, within 24 hours of their answer ([Instagram messaging](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/messaging-api/)).
 - **Nobody is messaged who did not write first.** There are no cold DMs and no bulk messages to followers.
-- **Publishing cap.** 100 API-published posts per Instagram account in a moving 24 hours ([Content publishing](https://developers.facebook.com/docs/instagram-platform/content-publishing/)).
+- **Publishing cap.** Meta's [Content publishing](https://developers.facebook.com/docs/instagram-platform/content-publishing/) page states 100 API-published posts per Instagram account in a moving 24 hours (another section of the same page says 50). The server reads the account's live quota before each publish.
 - **Instagram media cannot be deleted through the API.** `delete_post` removes it from dmswift only.
 
 ## Example prompts
@@ -182,12 +182,12 @@ and is still waiting? Suggest a reply for each and send nothing until I say so.
 
 ## Pricing
 
-MCP and API access are included in every plan, from Starter at $19 a month. The 7-day free trial runs on the Pro plan and needs no card. Current plans and limits: [dmswift.com/pricing](https://dmswift.com/pricing).
+MCP and API access are included in every plan, from Starter at $19 a month. The 7-day free trial includes Pro features with trial limits, and needs no card. Current plans and limits: [dmswift.com/pricing](https://dmswift.com/pricing).
 
 ## FAQ
 
 **Do I need a Meta developer account or my own Meta app?**
-No. dmswift is the approved app. You sign in with Instagram and grant access in Instagram's own dialog.
+No. dmswift's own Meta app makes the calls. You sign in with Instagram and grant access in Instagram's own dialog.
 
 **Does it work with a personal Instagram account?**
 No. Meta's API only covers professional accounts (Business or Creator). Switching is free and takes a minute in the Instagram app.
