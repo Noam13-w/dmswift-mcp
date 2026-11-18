@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "dmswift": {
+      "type": "http",
+      "url": "https://app.dmswift.com/mcp",
+      "headers": {
+        "Authorization": "Bearer fbcb_your_key_here"
+      }
+    }
+  }
+}

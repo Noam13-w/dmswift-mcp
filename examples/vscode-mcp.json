@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "dmswift": {
+      "type": "http",
+      "url": "https://app.dmswift.com/mcp"
+    }
+  }
+}
